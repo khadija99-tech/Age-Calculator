@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="assets/fonts/Poppins-Bold.ttf">
+  <link rel="stylesheet" href="assets/fonts/Poppins-Regular.ttf">
+  <link rel="stylesheet" href="assets/fonts/Poppins-Italic.ttf">
+
+  <title>Khadija Elhabchi| Age calculator app</title>
+
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: poppins;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 15px 15px 140px 15px;
+      margin: 6em 2em;
+      padding: 40px 20px;
+    }
+
+    .inputs {
+      display: grid;
+      grid-template-areas:
+        "day month year";
+    }
+
+    .day,
+    .month,
+    .year {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    label {
+      color: rgb(93, 93, 93);
+      font-size: 22px;
+      margin-right: 10px;
+      letter-spacing: 5px;
+    }
+
+
+    input {
+      width: 60px;
+      height: 30px;
+      border: 1px solid grey;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+
+    input[type="number"]:hover,
+    input[type="number"]:focus {
+      border-color: #864dfe;
+    }
+
+
+    input[type="number"].error {
+      border-color: red;
+    }
+
+    .error-message {
+      margin: 20px auto;
+      color: red;
+    }
+
+    hr {
+      margin: 60px auto;
+    }
+
+    img {
+      position: absolute;
+      top: 290px;
+      left: 43%;
+      background-color: #864dfe;
+      border-radius: 50px;
+      padding: 15px;
+    }
+
+    img:hover {
+      background-color: black;
+    }
+
+    .display {
+      font-size: 80px;
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: -3px;
+    }
+
+    span{
+      color: #864dfe;
+    }
+
+    .attribution {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 80%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="error-message"></div>
+
+    <div class="inputs">
+
+      <div class="day">
+        <label for="day">DAY</label>
+        <input type="number" name="" id="day" placeholder="DD">
+      </div>
+      <div class="month">
+        <label for="month">MONTH</label>
+        <input type="number" name="" id="month" placeholder="MM">
+      </div>
+      <div class="year">
+        <label for="year">YEAR</label>
+        <input type="number" name="" id="year" placeholder="YYYY">
+      </div>
+
+    </div>
+    <div>
+      <hr>
+      <img src="assets/images/icon-arrow.svg" alt="">
+    </div>
+    <div class="display">
+      <span> -- </span> years <br>
+      <span>-- </span> months <br>
+      <span>-- </span>days
+    </div>
+
+  </div>
+  </div>
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+    Coded by <a href="https://khadija99-tech.github.io/MyPortfolio/">Elhabchi Khadija</a>.
+  </div>
+
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const dayInput = document.getElementById('day');
+      const monthInput = document.getElementById('month');
+      const yearInput = document.getElementById('year');
+      const displayDiv = document.querySelector('.display');
+      const errorDiv = document.querySelector('.error-message');
+
+      const calculateAge = () => {
+        const today = new Date();
+        const day = parseInt(dayInput.value);
+        const month = parseInt(monthInput.value);
+        const year = parseInt(yearInput.value);
+
+        // Reset error message
+        errorDiv.textContent = '';
+
+        // Check if any input is empty
+        if (!day || !month || !year) {
+          errorDiv.textContent = 'Please enter all fields.';
+          return;
+        }
+
+        // Check if the date is in the future
+        const inputDate = new Date(year, month - 1, day);
+        if (inputDate > today) {
+          errorDiv.textContent = 'Please enter a valid date (not in the future).';
+          return;
+        }
+
+        // Check if the day, month, or year values are out of range
+        if ((day > 31 || day < 1) || (month > 12 || month < 1) || (year > 2024)) {
+          errorDiv.textContent = 'Please enter valid day (1-31), month (1-12), and year (<=2024).';
+          return;
+        }
+
+        // Calculate age
+        const ageInMilliseconds = today - inputDate;
+        const ageDate = new Date(ageInMilliseconds);
+        const ageYear = Math.abs(ageDate.getUTCFullYear() - 1970);
+        const ageMonth = ageDate.getUTCMonth();
+        const ageDay = ageDate.getUTCDate() - 1; // Minus 1 to get the correct days
+
+        displayDiv.innerHTML = `<span> ${ageYear} </span> years<br> <span>${ageMonth}</span> months<br> <span>${ageDay}</span> days`;
+      };
+
+      // Add event listeners to input fields
+      [dayInput, monthInput, yearInput].forEach(input => {
+        input.addEventListener('input', calculateAge);
+      });
+    });
+
+
+  </script>
+
+</body>
+
+</html>
